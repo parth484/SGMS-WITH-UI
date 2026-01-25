@@ -325,14 +325,45 @@ elif menu == "Calculate GPA":
 
 # ================= EXCEL =================
 elif menu == "Export to Excel":
+
+    st.subheader("📊 Export Grades to Excel")
+
     if st.button("Export Grades to Excel"):
+        from openpyxl import Workbook
+
         wb = Workbook()
         sh = wb.active
-        sh.append(["Student ID","Subject","Assessment","Marks","Max Marks","Date","Semester"])
+        sh.title = "Grades Report"
+
+       
+        sh.append([
+            "Student ID",
+            "Subject",
+            "Assessment",
+            "Marks",
+            "Max Marks"
+        ])
+
+       
         for g in grades:
             sh.append(list(g.values()))
-        wb.save("marks.xlsx")
-        st.success("Excel file created successfully 📁")
+
+        
+        file_name = "SGMS_Report.xlsx"
+        wb.save(file_name)
+
+        st.success("Excel file created successfully ✅")
+
+        
+        with open(file_name, "rb") as file:
+            st.download_button(
+                label="⬇️ Download Excel Report",
+                data=file,
+                file_name=file_name,
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+
+    
 
 elif menu == "Upgrade Grades****":
     st.write("Sorry we are working on this feature!! Stay Tuned")
