@@ -4,7 +4,13 @@ import streamlit as st
 import os
 import datetime
 from openpyxl import Workbook
-
+st.markdown("""
+<style>
+footer {
+    visibility: hidden;
+}
+</style>
+""", unsafe_allow_html=True)
 # ================= FILES =================
 STUDENT_FILE = "students3.txt"
 GRADE_FILE = "grades3.txt"
