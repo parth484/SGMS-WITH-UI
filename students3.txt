@@ -1,0 +1,2 @@
+STU576|David|gopli|dav@gmail.com|09/10/2009|Bsc Quantum computing|2025|Active
+STU909|Toto|Jojo|tojo@gmail.com|04/10/2026|AIML-LLM biased|2023|Active

@@ -114,8 +114,8 @@ menu = st.sidebar.selectbox(
         "Delete Student",
         "Add Grade",
         "View Grades",
-        "Upgrade Grades****",
-        "Delete Grades****",
+        "Upgrade Grades",
+        "Delete Grades",
         "Calculate GPA",
         "Export to Excel",
         "Import from Excel****"
@@ -339,9 +339,11 @@ elif menu == "Export to Excel":
         sh.append([
             "Student ID",
             "Subject",
-            "Assessment",
-            "Marks",
-            "Max Marks"
+            "Assessment Type",
+            "Marks ",
+            "Maximim Marks",
+            "Date ",
+            "Semester "
         ])
 
        
@@ -364,12 +366,140 @@ elif menu == "Export to Excel":
             )
 
     
+elif menu == "Upgrade Grades":
 
-elif menu == "Upgrade Grades****":
-    st.write("Sorry we are working on this feature!! Stay Tuned")
+    st.subheader("✏️ Upgrade Grades")
 
-elif menu == "Delete Grades****":
-    st.write("Sorry we are working on this feature!! Stay Tuned")
+    sid = st.selectbox(
+        "Select Student ID",
+        [s["student_id"] for s in students]
+    )
+
+    # collect grades of that student
+    student_grades = []
+    for g in grades:
+        if g["student_id"] == sid:
+            student_grades.append(g)
+
+    if len(student_grades) == 0:
+        st.warning("No grades found for this student")
+    else:
+        options = []
+        for g in student_grades:
+            options.append(
+                g["subject"] + " | " + g["assessment_type"] + " | " + g["semester"]
+            )
+
+        selected = st.selectbox("Select Grade to Update", options)
+
+        # find selected grade
+        selected_grade = None
+        for g in student_grades:
+            label = g["subject"] + " | " + g["assessment_type"] + " | " + g["semester"]
+            if label == selected:
+                selected_grade = g
+                break
+
+        with st.form("update_grade"):
+            subject = st.text_input("Subject", selected_grade["subject"])
+            atype = st.text_input("Assessment Type", selected_grade["assessment_type"])
+            marks = st.number_input(
+                "Marks Obtained",
+                value=float(selected_grade["marks_obtained"])
+            )
+            max_marks = st.number_input(
+                "Maximum Marks",
+                value=float(selected_grade["maximum_marks"])
+            )
+            date = st.text_input("Date (DD/MM/YYYY)", selected_grade["date"])
+            sem = st.selectbox(
+                "Semester",
+                ["1st","2nd","3rd","4th","5th","6th","7th","8th"],
+                index=["1st","2nd","3rd","4th","5th","6th","7th","8th"]
+                .index(selected_grade["semester"])
+            )
+
+            submit = st.form_submit_button("Update Grade")
+
+        if submit:
+            if not validate_marks(marks, max_marks):
+                st.error("Invalid Marks")
+            elif not validate_dob(date):
+                st.error("Invalid Date")
+            elif not exam_type(atype):
+                st.error("Invalid Assessment Type")
+            else:
+                for g in grades:
+                    if (
+                        g["student_id"] == sid and
+                        g["subject"] == selected_grade["subject"] and
+                        g["assessment_type"] == selected_grade["assessment_type"] and
+                        g["semester"] == selected_grade["semester"]
+                    ):
+                        g["subject"] = subject
+                        g["assessment_type"] = atype
+                        g["marks_obtained"] = marks
+                        g["maximum_marks"] = max_marks
+                        g["date"] = date
+                        g["semester"] = sem
+
+                save_grades(grades)
+                st.success("Grade updated successfully ✅")
+                st.rerun()
+
+
+elif menu == "Delete Grades":
+
+    st.subheader("🗑️ Delete Grade")
+
+    sid = st.selectbox(
+        "Select Student ID",
+        [s["student_id"] for s in students]
+    )
+
+    # collect grades of selected student
+    student_grades = []
+    for g in grades:
+        if g["student_id"] == sid:
+            student_grades.append(g)
+
+    if len(student_grades) == 0:
+        st.warning("No grades found for this student")
+    else:
+        options = []
+        for g in student_grades:
+            options.append(
+                g["subject"] + " | " + g["assessment_type"] + " | " + g["semester"]
+            )
+
+        selected = st.selectbox("Select Grade to Delete", options)
+
+        # find selected grade
+        selected_grade = None
+        for g in student_grades:
+            label = g["subject"] + " | " + g["assessment_type"] + " | " + g["semester"]
+            if label == selected:
+                selected_grade = g
+                break
+
+        st.warning("⚠️ This action cannot be undone")
+
+        if st.button("❌ Confirm Delete Grade"):
+            new_grades = []
+
+            for g in grades:
+                if not (
+                    g["student_id"] == sid and
+                    g["subject"] == selected_grade["subject"] and
+                    g["assessment_type"] == selected_grade["assessment_type"] and
+                    g["semester"] == selected_grade["semester"]
+                ):
+                    new_grades.append(g)
+
+            save_grades(new_grades)
+            st.success("Grade deleted successfully 🗑️")
+            st.rerun()
+
 
 elif menu == "Import from Excel****":
     st.write("Sorry we are working on this feature!! Stay Tuned")
