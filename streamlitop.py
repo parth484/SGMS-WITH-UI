@@ -4,13 +4,7 @@ import streamlit as st
 import os
 import datetime
 from openpyxl import Workbook
-st.markdown("""
-<style>
-footer {
-    visibility: hidden;
-}
-</style>
-""", unsafe_allow_html=True)
+
 # ================= FILES =================
 STUDENT_FILE = "students3.txt"
 GRADE_FILE = "grades3.txt"
@@ -124,7 +118,7 @@ menu = st.sidebar.selectbox(
         "Delete Grades",
         "Calculate GPA",
         "Export to Excel",
-        "Import from Excel****"
+        "Import from Excel"
     ]
 )
 
@@ -507,5 +501,70 @@ elif menu == "Delete Grades":
             st.rerun()
 
 
-elif menu == "Import from Excel****":
-    st.write("Sorry we are working on this feature!! Stay Tuned")
+elif menu == "Import from Excel":
+    st.subheader("📥 Import Grades from Excel")
+
+    st.info(
+        "Excel format must be:\n"
+        "Student ID | Subject | Assessment Type | Marks Obtained | Maximum Marks | Date | Semester"
+    )
+
+    uploaded_file = st.file_uploader(
+        "Upload Excel File",
+        type=["xlsx"]
+    )
+
+    if uploaded_file is not None:
+        from openpyxl import load_workbook
+
+        wb = load_workbook(uploaded_file)
+        sh = wb.active
+
+        registered_ids = []
+        for s in students:
+            registered_ids.append(s["student_id"])
+
+        imported = 0
+        skipped = 0
+
+        for i, row in enumerate(sh.iter_rows(min_row=2, values_only=True)):
+            if len(row) != 7:
+                skipped += 1
+                continue
+
+            sid, subject, atype, marks, max_marks, date, sem = row
+
+            # validation
+            if sid not in registered_ids:
+                skipped += 1
+                continue
+
+            if not validate_marks(marks, max_marks):
+                skipped += 1
+                continue
+
+            if not validate_dob(str(date)):
+                skipped += 1
+                continue
+
+            if not exam_type(str(atype).lower()):
+                skipped += 1
+                continue
+
+            grades.append({
+                "student_id": str(sid),
+                "subject": str(subject),
+                "assessment_type": str(atype).lower(),
+                "marks_obtained": float(marks),
+                "maximum_marks": float(max_marks),
+                "date": str(date),
+                "semester": str(sem)
+            })
+
+            imported += 1
+
+        save_grades(grades)
+
+        st.success(f"✅ Imported {imported} grades successfully")
+        st.warning(f"⚠️ Skipped {skipped} invalid / unregistered records")
+
