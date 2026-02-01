@@ -140,7 +140,7 @@ st.sidebar.markdown("---")
 st.sidebar.markdown(
     """
     <div style="text-align:center; margin-top:20px;">
-        <a href="https://in.linkedin.com/in/parth-adsul-8891063841" target="_blank">
+        <a href="https://www.linkedin.com/in/parth-adsul-889106384/" target="_blank">
             <i class="fab fa-linkedin" style="font-size:36px; color:#0A66C2;"></i>
         </a>
         <p style="font-size:12px; margin-top:6px;">
