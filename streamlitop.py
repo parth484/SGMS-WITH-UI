@@ -138,17 +138,22 @@ menu = st.sidebar.selectbox(
 st.sidebar.markdown("---")
 
 st.sidebar.markdown(
-    """
-    <div style="text-align:center; margin-top:20px;">
-        <a href="https://www.linkedin.com/in/parth-adsul-889106384/" target="_blank">
-            <i class="fab fa-linkedin" style="font-size:36px; color:#0A66C2;"></i>
-        </a>
-        <p style="font-size:12px; margin-top:6px;">
-            Made by Parth Adsul
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True
+"""
+<div style="display:flex; justify-content:center; gap:20px; margin-top:20px;">
+<a href="https://www.linkedin.com/in/parth-adsul-889106384/" target="_blank">
+<i class="fab fa-linkedin" style="font-size:34px; color:#0A66C2;"></i>
+</a>
+
+<a href="https://github.com/parth484" target="_blank">
+<i class="fab fa-github" style="font-size:34px; color:black;"></i>
+</a>
+</div>
+
+<p style="text-align:center; font-size:12px; margin-top:8px;">
+Made by Parth Adsul
+</p>
+""",
+unsafe_allow_html=True
 )
 
 
