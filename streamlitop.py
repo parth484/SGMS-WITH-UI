@@ -5,6 +5,15 @@ import os
 import datetime
 from openpyxl import Workbook
 
+
+
+st.markdown(
+    """
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    """,
+    unsafe_allow_html=True
+)
+
 # ================= FILES =================
 STUDENT_FILE = "students3.txt"
 GRADE_FILE = "grades3.txt"
@@ -105,7 +114,12 @@ def save_grades(grades):
 st.set_page_config("Student Grade System", layout="wide")
 st.title("🎓 Student Grade Management System")
 
+
+
 menu = st.sidebar.selectbox(
+
+      
+
     "Navigation",
     [
         "Add Student",
@@ -121,6 +135,24 @@ menu = st.sidebar.selectbox(
         "Import from Excel"
     ]
 )
+st.sidebar.markdown("---")
+
+st.sidebar.markdown(
+    """
+    <div style="text-align:center; margin-top:20px;">
+        <a href="https://in.linkedin.com/in/parth-adsul-8891063841" target="_blank">
+            <i class="fab fa-linkedin" style="font-size:36px; color:#0A66C2;"></i>
+        </a>
+        <p style="font-size:12px; margin-top:6px;">
+            Made by Parth Adsul
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+
+
 
 students = load_students()
 grades = load_grades()
@@ -504,9 +536,9 @@ elif menu == "Delete Grades":
 elif menu == "Import from Excel":
     st.subheader("📥 Import Grades from Excel")
 
-    st.info(
-        "Excel format must be:\n"
-        "Student ID | Subject | Assessment Type | Marks Obtained | Maximum Marks | Date | Semester"
+    st.warning(
+        "Excel format must be : \n"
+        "   Student ID | Subject | Assessment Type | Marks Obtained | Maximum Marks | Date | Semester"
     )
 
     uploaded_file = st.file_uploader(
